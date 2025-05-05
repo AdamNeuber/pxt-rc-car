@@ -1,0 +1,28 @@
+{
+    "name": "pxt-rc-car",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*",
+        "OmniBit": "github:lzty634158/OmniBit#21c29d255327798ea59b4e2a870ae219d3901af6",
+        "pxt-magicbit-pca9685": "github:tomaskazda/pxt-magicbit-pca9685#1e097c914b2c7ed1f4071d7b6288ef64812030e2"
+    },
+    "files": [
+        "main.ts",
+        "README.md",
+        "rc.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "7.0.61",
+        "targetId": "microbit"
+    },
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj",
+    "languageRestriction": "javascript-only"
+}
