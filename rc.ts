@@ -5,18 +5,22 @@ radio.onReceivedString(function(receivedString: string) {
     let forward1 = receivedString
     let forward = parseInt(forward1)
 
-    if(forward > 0) {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 180 - forward)
-        PCAmotor.Servo(PCAmotor.Servos.S2, forward)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 180 - forward)
-        PCAmotor.Servo(PCAmotor.Servos.S4, forward)
+    if(forward > 50) {
+        PCAmotor.Servo(PCAmotor.Servos.S1, 160)
+        PCAmotor.Servo(PCAmotor.Servos.S2, 20)
+        PCAmotor.Servo(PCAmotor.Servos.S3, 160)
+        PCAmotor.Servo(PCAmotor.Servos.S4, 20)
+    } else if(forward < -50) {
+        PCAmotor.Servo(PCAmotor.Servos.S1, 20)
+        PCAmotor.Servo(PCAmotor.Servos.S2, 160)
+        PCAmotor.Servo(PCAmotor.Servos.S3, 20)
+        PCAmotor.Servo(PCAmotor.Servos.S4, 160)
+    }  else {
+        PCAmotor.Servo(PCAmotor.Servos.S1, 90)
+        PCAmotor.Servo(PCAmotor.Servos.S2, 90)
+        PCAmotor.Servo(PCAmotor.Servos.S3, 90)
+        PCAmotor.Servo(PCAmotor.Servos.S4, 90)
     }
-    if(forward < 0) {
-        PCAmotor.Servo(PCAmotor.Servos.S1, forward)
-        PCAmotor.Servo(PCAmotor.Servos.S2, 180 - forward)
-        PCAmotor.Servo(PCAmotor.Servos.S3, forward)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 180 - forward)
-    }    
 })
 
 /*radio.onReceivedString(function(receivedString: string) {

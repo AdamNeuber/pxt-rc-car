@@ -1,9 +1,12 @@
 radio.setGroup(50)
 radio.setTransmitPower(7)
 
+let trimR = 0
+let TrimL = 0
+
 basic.forever(function() {
-    let forward = - Math.round(input.acceleration(Dimension.Y) / 10)
-    let side = Math.round(input.acceleration(Dimension.X) / 10)
+    let forward = - Math.round(input.acceleration(Dimension.Y))
+    let turn = Math.round(input.acceleration(Dimension.X))
 
     radio.sendString("" + forward)
 
@@ -14,5 +17,5 @@ basic.forever(function() {
     // Posíláme všechny tři hodnoty v jednom stringu oddělené čárkami
     radio.sendString("" + vx + "," + vy + "," + rot)
     basic.pause(100)*/
-
+    basic.pause(50)
 })
