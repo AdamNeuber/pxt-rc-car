@@ -1,51 +1,44 @@
 radio.setGroup(50)
 radio.setTransmitPower(7)
 
-radio.onReceivedString(function(receivedString: string) {
-    let forward1 = receivedString
-    let forward = parseInt(forward1)
+function rcTurn(strenght: number, state: string) {
+    if (state === "true") {
+        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + strenght)
+        PCAmotor.Servo(PCAmotor.Servos.S2, 90 + strenght)
+        PCAmotor.Servo(PCAmotor.Servos.S3, 90 - strenght)
+        PCAmotor.Servo(PCAmotor.Servos.S4, 90 - strenght)
+    }else {
+        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + strenght)
+        PCAmotor.Servo(PCAmotor.Servos.S2, 90 + strenght)
+        PCAmotor.Servo(PCAmotor.Servos.S3, 90 + strenght)
+        PCAmotor.Servo(PCAmotor.Servos.S4, 90 + strenght)
+    }
+}
 
-    if(forward > 50) {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 160)
-        PCAmotor.Servo(PCAmotor.Servos.S2, 20)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 160)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 20)
-    } else if(forward < -50) {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 20)
-        PCAmotor.Servo(PCAmotor.Servos.S2, 160)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 20)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 160)
-    }  else {
+radio.onReceivedString(function(receivedString: string) {
+    let msg = receivedString.split(",")
+    let forward = Math.clamp(-90, 90, parseInt(msg[0]))
+    let turn = Math.clamp(-90, 90,parseInt(msg[1]))
+    let trimR = Math.clamp(0, 10, parseInt(msg[2]))
+    let trimL = Math.clamp(0, 10, parseInt(msg[3]))
+    let strafeToggle = msg[4]
+    
+    if (forward != 0) {
+        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + forward)
+        PCAmotor.Servo(PCAmotor.Servos.S2, 100 - forward)
+        PCAmotor.Servo(PCAmotor.Servos.S3, 90 + forward)
+        PCAmotor.Servo(PCAmotor.Servos.S4, 100 - forward)
+        
+    } else {
         PCAmotor.Servo(PCAmotor.Servos.S1, 90)
         PCAmotor.Servo(PCAmotor.Servos.S2, 90)
         PCAmotor.Servo(PCAmotor.Servos.S3, 90)
         PCAmotor.Servo(PCAmotor.Servos.S4, 90)
+        basic.pause(700)
     }
+
+    if (turn < -20 || turn > 20) {
+        rcTurn(turn,strafeToggle)
+    }
+
 })
-
-/*radio.onReceivedString(function(receivedString: string) {
-    // Rozdělíme přijatý string do proměnných
-    let parts = receivedString.split(",")
-    if (parts.length != 3) return
-
-    let vx = parseFloat(parts[0])
-    let vy = parseFloat(parts[1])
-    let rot = parseFloat(parts[2])
-
-    // Výpočet rychlosti pro 4 omni kola
-    let m1 = vy + vx + rot
-    let m2 = vy - vx - rot
-    let m3 = vy - vx + rot
-    let m4 = vy + vx - rot
-
-    PCAmotor.Servo(PCAmotor.Servos.S1, m1)
-    PCAmotor.Servo(PCAmotor.Servos.S2, m2)
-    PCAmotor.Servo(PCAmotor.Servos.S3, m3)
-    PCAmotor.Servo(PCAmotor.Servos.S4, m4)
-})*/
-/*
-    PCAmotor.Servo(PCAmotor.Servos.S1, ) 
-    PCAmotor.Servo(PCAmotor.Servos.S2, )
-    PCAmotor.Servo(PCAmotor.Servos.S3, )
-    PCAmotor.Servo(PCAmotor.Servos.S4, )
-*/

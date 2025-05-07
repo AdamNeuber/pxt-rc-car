@@ -1,21 +1,44 @@
 radio.setGroup(50)
 radio.setTransmitPower(7)
 
+let strafeToggle:string = "false"
+
 let trimR = 0
-let TrimL = 0
+let trimL = 0
+
+let forward = 0
+let turn = 0
+let yaw = 0
+
+input.onLogoEvent(TouchButtonEvent.Pressed, function() {
+    if(strafeToggle == "false"){
+        strafeToggle = "true"
+    }else{
+        strafeToggle =  "false"
+    }
+})
+
+
+input.onButtonPressed(Button.A, function() {
+    trimL++
+})
+
+input.onButtonPressed(Button.B, function () {
+    trimR++
+})
+
+input.onButtonPressed(Button.AB, function () {
+    forward = 0
+    turn = 0
+    trimL = 0
+    trimR = 0
+    radio.sendString(forward + "," + turn + "," + trimR + "," + trimL + "," + strafeToggle)
+})
 
 basic.forever(function() {
-    let forward = - Math.round(input.acceleration(Dimension.Y))
-    let turn = Math.round(input.acceleration(Dimension.X))
+    forward = - Math.round(input.acceleration(Dimension.Y)) / 10
+    turn = Math.round(input.acceleration(Dimension.X)) / 10
 
-    radio.sendString("" + forward)
-
-    /*let vx = Math.clamp(-100, 100, input.acceleration(Dimension.X) / 10)
-    let vy = Math.clamp(-100, 100, input.acceleration(Dimension.Y) / 10)
-    let rot = Math.clamp(-100, 100, input.acceleration(Dimension.Z) / 20)
-
-    // Posíláme všechny tři hodnoty v jednom stringu oddělené čárkami
-    radio.sendString("" + vx + "," + vy + "," + rot)
-    basic.pause(100)*/
+    radio.sendString(forward + "," + turn + "," + trimR + "," + trimL + "," + strafeToggle)
     basic.pause(50)
 })
