@@ -17,17 +17,17 @@ function rcTurn(strenght: number, state: string) {
 
 radio.onReceivedString(function(receivedString: string) {
     let msg = receivedString.split(",")
-    let forward = Math.clamp(-90, 90, parseInt(msg[0]))
-    let turn = Math.clamp(-90, 90,parseInt(msg[1]))
-    let trimR = Math.clamp(0, 10, parseInt(msg[2]))
-    let trimL = Math.clamp(0, 10, parseInt(msg[3]))
+    let pitch = Math.clamp(-90, 90, parseInt(msg[0]))
+    let roll = Math.clamp(-90, 90,parseInt(msg[1]))
+    let slowL = parseInt(msg[2])
+    let slowR = parseInt(msg[3])
     let strafeToggle = msg[4]
     
-    if (forward != 0) {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + forward)
-        PCAmotor.Servo(PCAmotor.Servos.S2, 100 - forward)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 90 + forward)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 100 - forward)
+    if (pitch != 0) {
+        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + pitch)
+        PCAmotor.Servo(PCAmotor.Servos.S2, 100 - pitch)
+        PCAmotor.Servo(PCAmotor.Servos.S3, 90 + pitch)
+        PCAmotor.Servo(PCAmotor.Servos.S4, 100 - pitch)
         
     } else {
         PCAmotor.Servo(PCAmotor.Servos.S1, 90)
@@ -36,8 +36,21 @@ radio.onReceivedString(function(receivedString: string) {
         PCAmotor.Servo(PCAmotor.Servos.S4, 90)
     }
 
-    if (turn < -20 || turn > 20) {
-        rcTurn(turn,strafeToggle)
+    if (roll < -20 || roll > 20) {
+        rcTurn(roll,strafeToggle)
     }
 
+    while(slowR == 1) {
+        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + pitch/2)
+        PCAmotor.Servo(PCAmotor.Servos.S3, 90 + pitch/2)
+        slowL = 0
+        break
+    }
+
+    while (slowL == 1) {
+        PCAmotor.Servo(PCAmotor.Servos.S2, 90 - pitch/2)
+        PCAmotor.Servo(PCAmotor.Servos.S4, 90 - pitch/2)
+        slowR = 0
+        break
+    }
 })

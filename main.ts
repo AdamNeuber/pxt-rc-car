@@ -3,11 +3,28 @@ radio.setTransmitPower(7)
 
 let strafeToggle:string = "false"
 
-let trimR = 0
-let trimL = 0
+let slowR = 0
+let slowL = 0
 
-let forward = 0
-let turn = 0
+let pitch = 0
+let roll = 0
+
+input.onButtonPressed(Button.A, function() {
+    if(slowL == 0){
+        slowL = 1
+    } else {
+        slowL = 0
+    }
+})
+
+input.onButtonPressed(Button.B, function () {
+    if (slowR == 0) {
+        slowR = 1
+    } else {
+        slowR = 0
+    }
+})
+
 
 input.onLogoEvent(TouchButtonEvent.Pressed, function() {
     if(strafeToggle == "false"){
@@ -18,18 +35,18 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function() {
 })
 
 input.onButtonPressed(Button.AB, function () {
-    forward = 0
-    turn = 0
-    trimL = 0
-    trimR = 0
-    radio.sendString(forward + "," + turn + "," + trimR + "," + trimL + "," + strafeToggle)
-    basic.pause(700)
+    pitch = 0
+    roll = 0
+    slowL = 0
+    slowR = 0
+    strafeToggle = "false"
+    radio.sendString(pitch + "," + roll + "," + slowR + "," + slowL + "," + strafeToggle)
 })
 
 basic.forever(function() {
-    forward = - Math.round(input.acceleration(Dimension.Y)) / 10
-    turn = Math.round(input.acceleration(Dimension.X)) / 10
+    pitch = - Math.round(input.acceleration(Dimension.Y)) / 10
+    roll = Math.round(input.acceleration(Dimension.X)) / 10
 
-    radio.sendString(forward + "," + turn + "," + trimR + "," + trimL + "," + strafeToggle)
+    radio.sendString(pitch + "," + roll + "," + slowR + "," + slowL + "," + strafeToggle)
     basic.pause(50)
 })
