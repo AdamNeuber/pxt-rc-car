@@ -8,7 +8,6 @@ let trimL = 0
 
 let forward = 0
 let turn = 0
-let yaw = 0
 
 input.onLogoEvent(TouchButtonEvent.Pressed, function() {
     if(strafeToggle == "false"){
@@ -18,21 +17,13 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function() {
     }
 })
 
-
-input.onButtonPressed(Button.A, function() {
-    trimL++
-})
-
-input.onButtonPressed(Button.B, function () {
-    trimR++
-})
-
 input.onButtonPressed(Button.AB, function () {
     forward = 0
     turn = 0
     trimL = 0
     trimR = 0
     radio.sendString(forward + "," + turn + "," + trimR + "," + trimL + "," + strafeToggle)
+    basic.pause(700)
 })
 
 basic.forever(function() {

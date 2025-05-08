@@ -34,7 +34,6 @@ radio.onReceivedString(function(receivedString: string) {
         PCAmotor.Servo(PCAmotor.Servos.S2, 90)
         PCAmotor.Servo(PCAmotor.Servos.S3, 90)
         PCAmotor.Servo(PCAmotor.Servos.S4, 90)
-        basic.pause(700)
     }
 
     if (turn < -20 || turn > 20) {
