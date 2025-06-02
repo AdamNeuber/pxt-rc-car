@@ -32,20 +32,6 @@ function move(fwd: number, sd: number, tog: boolean) {
     }
 }
 
-function turn(strength: number, state: string) {
-    if (state === "true") {
-        PCAmotor.GeekServo(PCAmotor.Servos.S1, neutralPos + strength)
-        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos + strength)
-        PCAmotor.GeekServo(PCAmotor.Servos.S3, neutralPos - strength)
-        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos - strength)
-    } else {
-        PCAmotor.GeekServo(PCAmotor.Servos.S1, neutralPos + strength)
-        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos + strength)
-        PCAmotor.GeekServo(PCAmotor.Servos.S3, neutralPos + strength)
-        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos + strength)
-    }
-}
-
 radio.onReceivedString(function (receivedString: string) {
     msg = receivedString.split(",")
     carPitch = Math.clamp(-1000, 1000, parseInt(msg[0]))
