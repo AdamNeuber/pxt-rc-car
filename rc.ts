@@ -2,59 +2,55 @@ radio.setGroup(50)
 radio.setTransmitPower(7)
 
 let msg
-let carPitch
-let carRoll
-let carSlowL
-let carSlowR
-let carStrafe
+let carPitch: number
+let carRoll: number
+let carStrafe: boolean
 
+const neutralPos = 1500
+const rightWheelEqalizer = 90
+const valMod = 0.75
+
+function parseBool(value: string) {
+    if (value == "t") {
+        return true
+    } else {
+        return false
+    }
+}
+
+function move(fwd: number, sd: number, tog: boolean) {
+    if (tog == false) {
+        PCAmotor.GeekServo(PCAmotor.Servos.S1, neutralPos + fwd * valMod + sd * valMod)
+        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos - fwd * valMod + rightWheelEqalizer + sd * valMod)
+        PCAmotor.GeekServo(PCAmotor.Servos.S3, neutralPos + fwd * valMod + sd * valMod)
+        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos - fwd * valMod + rightWheelEqalizer + sd * valMod)
+    } else {
+        PCAmotor.GeekServo(PCAmotor.Servos.S1, neutralPos + sd)
+        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos + rightWheelEqalizer + sd)
+        PCAmotor.GeekServo(PCAmotor.Servos.S3, neutralPos - sd)
+        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos - rightWheelEqalizer - sd)
+    }
+}
 
 function turn(strength: number, state: string) {
     if (state === "true") {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + strength)
-        PCAmotor.Servo(PCAmotor.Servos.S2, 90 + strength)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 90 - strength)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 90 - strength)
+        PCAmotor.GeekServo(PCAmotor.Servos.S1, neutralPos + strength)
+        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos + strength)
+        PCAmotor.GeekServo(PCAmotor.Servos.S3, neutralPos - strength)
+        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos - strength)
     } else {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + strength)
-        PCAmotor.Servo(PCAmotor.Servos.S2, 90 + strength)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 90 + strength)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 90 + strength)
+        PCAmotor.GeekServo(PCAmotor.Servos.S1, neutralPos + strength)
+        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos + strength)
+        PCAmotor.GeekServo(PCAmotor.Servos.S3, neutralPos + strength)
+        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos + strength)
     }
 }
 
 radio.onReceivedString(function (receivedString: string) {
     msg = receivedString.split(",")
-    carPitch = Math.clamp(-90, 90, parseInt(msg[0]))
-    carRoll = Math.clamp(-90, 90, parseInt(msg[1]))
-    carSlowL = parseInt(msg[2])
-    carSlowR = parseInt(msg[3])
-    carStrafe = msg[4]
+    carPitch = Math.clamp(-1000, 1000, parseInt(msg[0]))
+    carRoll = Math.clamp(-1000, 1000, parseInt(msg[1]))
+    carStrafe = parseBool(msg[2])
 
-    if (carPitch != 0) {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + carPitch)
-        PCAmotor.Servo(PCAmotor.Servos.S2, 100 - carPitch)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 90 + carPitch)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 100 - carPitch)
-
-    } else {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 90)
-        PCAmotor.Servo(PCAmotor.Servos.S2, 90)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 90)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 90)
-    }
-
-    if (carRoll < -20 || carRoll > 20) {
-        turn(carRoll, carStrafe)
-    }
-
-    if (carSlowR == 1 && carSlowL == 0) {
-        PCAmotor.Servo(PCAmotor.Servos.S1, 90 + carPitch / 2)
-        PCAmotor.Servo(PCAmotor.Servos.S3, 90 + carPitch / 2)
-    }
-
-    if (carSlowL == 1 && carSlowR == 0) {
-        PCAmotor.Servo(PCAmotor.Servos.S2, 90 - carPitch / 2)
-        PCAmotor.Servo(PCAmotor.Servos.S4, 90 - carPitch / 2)
-    }
+    move(carPitch, carRoll, carStrafe)
 })
