@@ -20,15 +20,17 @@ function parseBool(value: string) {
 
 function move(fwd: number, sd: number, tog: boolean) {
     if (tog == false) {
+        //All movement in general
         PCAmotor.GeekServo(PCAmotor.Servos.S1, neutralPos + fwd * valMod + sd * valMod)
-        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos - fwd * valMod + rightWheelEqalizer + sd * valMod)
+        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos - fwd * valMod + sd * valMod + rightWheelEqalizer)
         PCAmotor.GeekServo(PCAmotor.Servos.S3, neutralPos + fwd * valMod + sd * valMod)
-        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos - fwd * valMod + rightWheelEqalizer + sd * valMod)
+        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos - fwd * valMod + sd * valMod + rightWheelEqalizer)
     } else {
+        //Strafing
         PCAmotor.GeekServo(PCAmotor.Servos.S1, neutralPos + sd)
-        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos + rightWheelEqalizer + sd)
+        PCAmotor.GeekServo(PCAmotor.Servos.S2, neutralPos + sd + rightWheelEqalizer)
         PCAmotor.GeekServo(PCAmotor.Servos.S3, neutralPos - sd)
-        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos - rightWheelEqalizer - sd)
+        PCAmotor.GeekServo(PCAmotor.Servos.S4, neutralPos - sd - rightWheelEqalizer)
     }
 }
 
